@@ -1,36 +1,16 @@
 import time, json 
 from lerobot.robots.so101_follower import SO101Follower, SO101FollowerConfig
 
+
 robot_config = SO101FollowerConfig(port="/dev/ttyACM0", id="my_awesome_follower_arm", use_degrees=True, max_relative_target=200.0)
 robot = SO101Follower(robot_config)
 robot.connect()
 
-position_arr = [
-    {
-        'shoulder_pan.pos': 0.0,
-        'shoulder_lift.pos': -30.0,
-        'elbow_flex.pos': 30.0,
-        'wrist_flex.pos': 70.0,
-        'wrist_roll.pos': 0.0,
-        'gripper.pos': 0.0
-    },
-    {
-        'shoulder_pan.pos': 45.0,
-        'shoulder_lift.pos': -20.0,
-        'elbow_flex.pos': 30.0,
-        'wrist_flex.pos': 60.0,
-        'wrist_roll.pos': -30.0,
-        'gripper.pos': 50.0
-    },
-    {
-        'shoulder_pan.pos': -45.0,
-        'shoulder_lift.pos': -0.0,
-        'elbow_flex.pos': 0.0,
-        'wrist_flex.pos': -30.0,
-        'wrist_roll.pos': 30.0,
-        'gripper.pos': 30.0
-    }
-]
+
+# define the target pose 
+# For now, assume bottle position is fixed 
+# TODO get the actual position of the bottle from camera and offset it a little to get the target position 
+target_pose = 
 
 
 def check_dict(actual_pos: dict, target_pos: dict ) -> bool: 
