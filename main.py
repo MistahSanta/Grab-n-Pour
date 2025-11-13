@@ -10,7 +10,7 @@ robot.connect()
 # define the target pose 
 # For now, assume bottle position is fixed 
 # TODO get the actual position of the bottle from camera and offset it a little to get the target position 
-target_pose = 
+
 
 
 def check_dict(actual_pos: dict, target_pos: dict ) -> bool: 
