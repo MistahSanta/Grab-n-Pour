@@ -1,7 +1,7 @@
 
 ## Build lerobot-ros
 - conda create -y -n lerobot-ros python=3.12
-- conda activate lerobot-ros
+- conda activate lerobot-ros # Activate the virtual env
 - conda install -c conda-forge libstdcxx-ng -y # needed as rclpy requires GLIBCXX_3.4.30 symbols
 - source /opt/ros/jazzy/setup.sh
 - cd src/lerobot-ros

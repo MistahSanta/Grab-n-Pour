@@ -1,4 +1,6 @@
-import time, json, math, sys
+# Move the robot using Joints space 
+
+import time, json, math
 from lerobot_robot_ros.config import SO101ROSConfig
 from lerobot_robot_ros.robot import SO101ROS
 
@@ -93,6 +95,7 @@ def check_dict(actual_pos: dict, target_pos: dict ) -> bool:
 
 
 # sys.exit()
+
 
 for index, position in enumerate(position_arr):
     start_time = time.time()
