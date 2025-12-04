@@ -1,0 +1,17 @@
+moveit_py_node:
+  ros__parameters:
+
+    # === URDF ===
+    robot_description: !!file /home/jon/Documents/Robotics/GrabnPour/install/lerobot_moveit/share/lerobot_moveit/urdf/lerobot.urdf
+
+    # === SRDF ===
+    robot_description_semantic: !!file /home/jon/Documents/Robotics/GrabnPour/install/lerobot_moveit/share/lerobot_moveit/srdf/lerobot.srdf
+
+    # === Planning pipelines ===
+    planning_pipelines:
+      pipelines: ["ompl"]
+
+    ompl_planning: !!file /home/jon/Documents/Robotics/GrabnPour/install/lerobot_moveit/share/lerobot_moveit/config/ompl_planning.yaml
+
+    # === Kinematics ===
+    robot_description_kinematics: !!file /home/jon/Documents/Robotics/GrabnPour/install/lerobot_moveit/share/lerobot_moveit/config/kinematics.yaml

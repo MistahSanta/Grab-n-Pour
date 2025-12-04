@@ -24,7 +24,33 @@
 2) In terminal 2, run the robot controller:
     - ros2 launch lerobot_controller so101_controller.launch.py && ros2 launch lerobot_moveit so101_moveit.launch.py
 
+# For actual robot
+Terminal 1: Launch the MoveIt config file
+
+Terminal 2: Run pose estimator with ROS publishing
+python pose_6D_estimator.py --stl rect_cup.stl --ros
+
+Terminal 3: Run MoveIt integration
+python moveit_integration.py 
+
 
 # To test it works:
 
     - python3 simulasimulate_main.py (You should see the SO101 arm move around)
+
+
+
+# For OpenCV and Running robot:
+Terminal 1: Launch robot with MoveIt (top two)
+
+Terminal 2: Run pose estimator
+source /opt/ros/jazzy/setup.bash
+python3 pose_6D_estimator.py --stl rect_cup.stl --ros
+
+Terminal 3: Verify poses are being published
+source /opt/ros/jazzy/setup.bash
+ros2 topic echo /container_pose
+
+Terminal 4: Run MoveIt integration
+source /opt/ros/jazzy/setup.bash
+python3 moveit_integration.py

@@ -22,7 +22,7 @@ from pymoveit2 import GripperInterface
 
 import numpy as np
 from transforms3d.quaternions import mat2quat, quat2mat
-from gazebo_func import get_current_joint_states, get_pose_gazebo, extract_specific_joints, ros_pose_to_rt
+from gazebo_func import get_current_joint_states, get_pose_gazebo, extract_specific_joints, ros_pose_to_rt, robot_world_pose
 from lerobot_robot_ros.config import SO101ROSConfig
 from dataclasses import field
 from moveit_msgs.msg import Constraints, JointConstraint
@@ -201,6 +201,13 @@ def main():
     print('T_bo', T_bo)
 
 
+    while 1:
+        T_robot = robot_world_pose(node_moveit)
+        if T_robot is not None:
+            break
+    print('T_robot', T_robot)
+
+
     # Since the SO101 arm is limited in mobility with MoveIt, we will
     # First go to all 0 position, so we can move step by step
 
@@ -224,10 +231,29 @@ def main():
     print("cur_position: ", robot_current_position)
     # # compute standoff position of the rect_cup 
 
+    x_robot, y_robot, z_robot = T_robot[0, 3], T_robot[1, 3], T_robot[2, 3]
     
     x_cup, y_cup, z_cup = T_bo[0,3], T_bo[1,3], T_bo[2,3]
     #standoff position 
-    p = np.array([x_cup, y_cup + 0.15, z_cup + 0.1])
+    # p = np.array([x_cup, y_cup, z_cup + 0.1])
+    # ratio = math.fabs(x_cup / y_cup)
+
+    # x_off = math.fabs(x_cup / y_cup) * 0.1
+    # if x_cup > 0:
+    #     x_off = -x_off
+    
+    # y_off = ratio * 0.1
+
+    # x_offset = (x_cup) - ratio * 0.1
+    # y_offset = (y_cup) - ratio * 0.1
+
+
+
+    x_offset = (x_cup) * 0.600
+    y_offset = (y_cup) * 0.600
+
+    p = np.array([x_offset, y_offset, z_cup + 0.075])
+    # p = np.array([x_cup, y_cup + 0.21648056, z_cup + 0.2])
 
     #print( "P: ", p, flush=True)
 
@@ -236,8 +262,9 @@ def main():
         [0,1,0],
         [0,0,1]]
     ) # no rotation
-    q_xyzw_current = np.array([0.0, 0.7071, 0.0, 0.7071])
-    R_standoff = rotZ(np.deg2rad(0))[:3,:3] 
+
+    rotation = np.matmul(rotX(np.deg2rad(90)), rotY(np.deg2rad(-90)))
+    R_standoff = np.matmul(rotZ(-(np.deg2rad(90) - np.atan2(x_cup, -y_cup))), rotation)[:3,:3]
     print("R:", R_standoff, flush=True)
     q_wxyz = mat2quat(R_standoff)
     q_xyzw = np.array([q_wxyz[1], q_wxyz[2], q_wxyz[3], q_wxyz[0]])
