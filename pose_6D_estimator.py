@@ -608,6 +608,25 @@ class Container6DPoseEstimator:
         refined_pose = self.refine_pose_pnp(frame, initial_pose)
         
         return refined_pose
+    
+    def process_frame_relative(self, frame: np.ndarray) -> Optional[Tuple[float, float]]:
+        """Returns the relative location in the camera frame that a container is at."""
+
+        detection = self.detect_container(frame)
+
+        if detection is None:
+            return None
+        
+        print(f"bbox is {detection.bbox}")
+
+        box_x, box_y, box_w, box_h = detection.bbox
+        box_center_x = box_x + box_w / 2
+        box_center_y = box_y + box_h / 2
+
+        box_x_percent = box_center_x / 640
+        box_y_percent = box_center_y / 480
+        
+        return (box_x_percent, box_y_percent)
         
     def visualize_pose(self, frame: np.ndarray, pose: Pose6D) -> np.ndarray:
         """
@@ -717,7 +736,12 @@ class Container6DPoseEstimator:
                 
             # Process frame
             pose = self.process_frame(frame)
-            
+
+            # FIXME: testing relative location ##########################
+            loc = self.process_frame_relative(frame)
+            print(f"relative location of container is {loc}")
+            # ###########################################################
+
             # Store pose in queue
             if pose is not None and not self.pose_queue.full():
                 self.pose_queue.put(pose)
